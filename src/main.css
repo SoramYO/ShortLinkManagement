@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+    /* Headings */
+    h1 {
+      font-size: 2em;
+      font-weight: bold;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+  
+    h2 {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+  
+    h3 {
+      font-size: 1.17em;
+      font-weight: bold;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+  
+    h4 {
+      font-size: 1em;
+      font-weight: bold;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+  
+    h5 {
+      font-size: 0.83em;
+      font-weight: bold;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+  
+    h6 {
+      font-size: 0.67em;
+      font-weight: bold;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+  
+    /* Paragraph */
+    p {
+      font-size: 1em;
+      line-height: 1.5;
+      color: #333;
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+  
+    /* Anchor */
+    a {
+      color: #007bff;
+      text-decoration: none;
+      background-color: transparent;
+    }
+    a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  
+    /* Unordered List */
+    ul {
+      list-style-type: disc;
+      margin-top: 0;
+      margin-bottom: 1em;
+      padding-left: 40px;
+    }
+  
+    /* Ordered List */
+    ol {
+      list-style-type: decimal;
+      margin-top: 0;
+      margin-bottom: 1em;
+      padding-left: 40px;
+    }
+  
+    /* List Item */
+    li {
+      margin-bottom: 0.5em;
+    }
+  
+    /* Other Custom Base Styles */
+    /* Add more custom base styles as needed */
+  }
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #d9d9d9; 
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #d9d9d9; 
+}
