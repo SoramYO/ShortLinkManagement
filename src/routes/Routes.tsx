@@ -8,6 +8,7 @@ import PaymentProof from "../components/Landing/PaymentProof";
 import PayoutRatesPage from "../components/Landing/PayoutRatesPage";
 import PrivacyPage from "../components/Landing/PrivacyPage";
 import TermPage from "../components/Landing/TermPage";
+import URLHandler from "../handler/URLHandler";
 import AdminLayout from "../layouts/AdminLayout";
 import MemberLayout from "../layouts/MemberLayout";
 import AdminDashboard from "../pages/admin/AdminDashboard";
@@ -30,6 +31,7 @@ import UserList from "../pages/admin/UserList";
 import APIManager from "../pages/member/APIManager";
 import Affiliates from "../pages/member/Affiliates";
 import DeveloperAPI from "../pages/member/DeveloperAPI";
+import GetLinkPage from "../pages/member/GetLinkPage";
 import LinkHistory from "../pages/member/LinkHistory";
 import MassShrinker from "../pages/member/MassShrinker";
 import MemberDashboard from "../pages/member/MemberDashboard";
@@ -64,6 +66,14 @@ const router = createBrowserRouter(
         { path: "/privacy", element: <PrivacyPage /> },
         { path: "/payout-rates", element: <PayoutRatesPage /> },
         { path: "/payment-proof", element: <PaymentProof /> },
+        {
+          path: "/getlink",
+          element: <GetLinkPage />,
+        },
+        {
+          path: "/:shortCode",
+          element: <URLHandler />,
+        },
       ],
     },
     {

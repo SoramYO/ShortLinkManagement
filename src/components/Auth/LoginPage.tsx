@@ -22,8 +22,9 @@ export default function LoginPage() {
     dispatch({ type: "LOGIN_START" });
     try {
       const response = await loginAccount(username, password);
+      console.log(response);
 
-      if (response && response.data.errCode === 0) {
+      if (response && response.data.success === true) {
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: response.data.user,
