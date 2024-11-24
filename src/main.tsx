@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import { RouterProvider } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
+import { LoadingProvider } from "./context/LoadingContext";
 import { ThemeProvider as CustomThemeProvider } from "./context/ThemeContext";
 import { AuthContextProvider } from "./context/useAuth";
 import i18n from "./i18n";
@@ -16,9 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <CustomThemeProvider>
         <LanguageProvider>
           <AuthContextProvider>
-            <I18nextProvider i18n={i18n}>
-              <RouterProvider router={router} />
-            </I18nextProvider>
+            <LoadingProvider>
+              <I18nextProvider i18n={i18n}>
+                <RouterProvider router={router} />
+              </I18nextProvider>
+            </LoadingProvider>
           </AuthContextProvider>
         </LanguageProvider>
       </CustomThemeProvider>
