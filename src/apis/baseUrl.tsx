@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:3000/api";
+export const API_BASE_URL = "https://short-link-management-be.vercel.app/api";
 export const API_LOG_IN = `/auth/login`;
 export const API_SIGN_UP = `/auth/register`;
 export const API_LINKS = `/links`;
