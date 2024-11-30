@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
+
 import LoginPage from "../components/Auth/LoginPage";
 import RegisterPage from "../components/Auth/RegisterPage";
 import ErrorPage from "../components/ErrorPage";
@@ -38,7 +38,9 @@ import MemberDashboard from "../pages/member/MemberDashboard";
 import QuickLink from "../pages/member/QuickLink";
 import Statistics from "../pages/member/Statistics";
 import Withdraw from "../pages/member/Withdraw";
+import UserProfile from "../pages/member/UserProfile";
 import ProtectedRoute from "./ProtectedRoute";
+import App from "./../App";
 
 const router = createBrowserRouter(
   [
@@ -93,6 +95,7 @@ const router = createBrowserRouter(
         { path: "developer-api", element: <DeveloperAPI /> },
         { path: "withdraw", element: <Withdraw /> },
         { path: "affiliates", element: <Affiliates /> },
+        {path: "profile",element: <UserProfile /> },
       ],
     },
     {

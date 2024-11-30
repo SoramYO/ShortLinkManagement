@@ -44,7 +44,7 @@ export default function RegisterPage() {
         username,
         refCode
       );
-      if (response && response.data.errCode === 0) {
+      if (response && response.data.success === true) {
         navigate("/login");
         toast.success(response.data.message);
       } else {

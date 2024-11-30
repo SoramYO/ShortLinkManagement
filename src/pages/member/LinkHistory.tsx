@@ -1,10 +1,29 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../apis/baseUrl";
+import { getLinkList } from "../../apis/shortLinkApis";
 import { ThemeContext } from "../../context/ThemeContext";
+import { Link as LinkType } from "../../models/Link";
 
 const LinkHistory = () => {
   const { theme } = useContext(ThemeContext);
   const [showHidden, setShowHidden] = useState(false);
+  const [links, setLinks] = useState<LinkType[]>([]);
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      const response = await getLinkList();
+      if (response) {
+        setLinks(response.data.links);
+        console.log(response.data.links);
+      } else {
+        toast.error("Failed to fetch links");
+      }
+    };
+
+    fetchLinks();
+  }, []);
 
   return (
     <div>
@@ -73,11 +92,43 @@ const LinkHistory = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm" colSpan={5}>
-                  No links found
-                </td>
-              </tr>
+              {links.length > 0 ? (
+                links.map((link) => (
+                  <tr key={link._id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <a
+                        href={`${BASE_URL}/${link.shortCode}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        {link.shortCode}
+                      </a>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {link.originalUrl}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {link.stats.totalViews}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {new Date(link.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {/* Add any actions you want here */}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-sm"
+                    colSpan={5}
+                  >
+                    No links found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

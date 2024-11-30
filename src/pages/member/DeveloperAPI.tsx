@@ -1,10 +1,11 @@
 import { Copy } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import { API_BASE_URL } from "../../apis/baseUrl";
 import { ThemeContext } from "../../context/ThemeContext";
 
 const DeveloperAPI = () => {
   const { theme } = useContext(ThemeContext);
-  const [apiKey, setApiKey] = useState("YOUR_API_KEY");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -43,10 +44,10 @@ const DeveloperAPI = () => {
                 theme === "dark" ? "bg-gray-700" : "bg-gray-100"
               }`}
             >
-              {apiKey}
+              {user.apiKey}
             </code>
             <button
-              onClick={() => handleCopy(apiKey)}
+              onClick={() => handleCopy(user.apiKey)}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <Copy className="h-4 w-4" />
@@ -70,7 +71,7 @@ const DeveloperAPI = () => {
                   theme === "dark" ? "bg-gray-700" : "bg-gray-100"
                 }`}
               >
-                POST https://api.example.com/shorten
+                POST {API_BASE_URL}/shorten
               </code>
             </div>
 
@@ -83,7 +84,7 @@ const DeveloperAPI = () => {
               >
                 {JSON.stringify(
                   {
-                    api_key: "YOUR_API_KEY",
+                    api_key: user.apiKey,
                     url: "https://example.com",
                   },
                   null,

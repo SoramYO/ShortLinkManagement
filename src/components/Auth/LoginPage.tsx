@@ -22,13 +22,14 @@ export default function LoginPage() {
     dispatch({ type: "LOGIN_START" });
     try {
       const response = await loginAccount(username, password);
-      console.log(response);
 
       if (response && response.data.success === true) {
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: response.data.user,
         });
+        localStorage.setItem("accessToken", response.data?.accessToken || "");
+        localStorage.setItem("refreshToken", response.data?.refreshToken || "");
         const userRole = response.data.user.role.name;
         if (userRole === "ADMIN") {
           navigate("/admin/dashboard");

@@ -5,6 +5,7 @@ import {
   deleteShortenerAPI,
   getShortenerAPIs,
   toggleShortenerAPI,
+  updateShortenerAPI,
 } from "../../apis/shoternerApis";
 import APIForm from "../../components/APIForm";
 import APIList from "../../components/APIList";
@@ -14,21 +15,18 @@ import type { ShortenerAPI, ShortenerAPIResponse } from "../../types/api";
 const APIManager = () => {
   const { theme } = useContext(ThemeContext);
   const [apis, setApis] = useState<ShortenerAPIResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchAPIs();
   }, []);
 
   const fetchAPIs = async () => {
-    setIsLoading(true);
+
     try {
       const response = await getShortenerAPIs();
       setApis(response?.data.shortenerAPIs || []);
     } catch (error) {
       toast.error("Failed to fetch API list");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -44,7 +42,8 @@ const APIManager = () => {
 
   const handleDeleteAPI = async (id: string) => {
     try {
-      await deleteShortenerAPI(id);
+      const response= await deleteShortenerAPI(id);
+      toast.success(response?.data.message);
       toast.success("API deleted successfully");
       fetchAPIs();
     } catch (error) {
@@ -54,17 +53,39 @@ const APIManager = () => {
 
   const handleToggleAPI = async (id: string) => {
     try {
-      await toggleShortenerAPI(id);
-      toast.success("API status toggled successfully");
+      const response = await toggleShortenerAPI(id);
+      toast.success(response?.data.message);
       fetchAPIs();
     } catch (error) {
       toast.error("Failed to toggle API status");
     }
   };
 
-  const handleEditAPI = async (api: ShortenerAPIResponse) => {
-    // Implement the edit functionality here
-    toast.info("Edit API functionality is not implemented yet");
+  const handleEditAPI = async (
+    id: string,
+    updatedData: Partial<ShortenerAPIResponse>
+  ) => {
+    try {
+      await updateShortenerAPI({
+        _id: id,
+        name: updatedData.name || "",
+        endpoint: updatedData.endpoint || "",
+        maxViewsPerIP: updatedData.maxViewsPerIP || 0,
+        priority: updatedData.priority || 0,
+        content: updatedData.content || "",
+        schedule: updatedData.schedule || {
+          enabled: false,
+          startTime: "00:00",
+          endTime: "23:59",
+        },
+        applicableCountries: updatedData.applicableCountries || [],
+        isActive: updatedData.isActive || false,
+      });
+      toast.success("API updated successfully");
+      fetchAPIs();
+    } catch (error) {
+      toast.error("Failed to update API");
+    }
   };
 
   return (

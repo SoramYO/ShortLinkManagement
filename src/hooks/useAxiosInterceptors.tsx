@@ -1,4 +1,3 @@
-// src/hooks/useAxiosInterceptors.tsx
 import { useEffect } from "react";
 import { useLoading } from "../context/LoadingContext";
 import axiosInstance from "../utils/axios";
@@ -7,7 +6,7 @@ const useAxiosInterceptors = () => {
   const { setLoading } = useLoading();
 
   useEffect(() => {
-    const requestInterceptor = axiosInstance.interceptors.request.use(
+    const requestId = axiosInstance.interceptors.request.use(
       (config) => {
         setLoading(true);
         return config;
@@ -18,7 +17,7 @@ const useAxiosInterceptors = () => {
       }
     );
 
-    const responseInterceptor = axiosInstance.interceptors.response.use(
+    const responseId = axiosInstance.interceptors.response.use(
       (response) => {
         setLoading(false);
         return response;
@@ -30,8 +29,8 @@ const useAxiosInterceptors = () => {
     );
 
     return () => {
-      axiosInstance.interceptors.request.eject(requestInterceptor);
-      axiosInstance.interceptors.response.eject(responseInterceptor);
+      axiosInstance.interceptors.request.eject(requestId);
+      axiosInstance.interceptors.response.eject(responseId);
     };
   }, [setLoading]);
 };

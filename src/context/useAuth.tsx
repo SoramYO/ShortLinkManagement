@@ -1,11 +1,34 @@
 import { createContext, Dispatch, useEffect, useReducer } from "react";
 
 // Define types for the state and actions
+type Role = {
+  isActive: boolean;
+  _id: string;
+  name: string;
+  permissions: string[];
+  limits: any[];
+};
+
+type Subscription = {
+  status: string;
+  autoRenew: boolean;
+};
+
 type User = {
-  // Add specific user properties here
-  id?: string;
-  username?: string;
-  email?: string;
+  _id: string;
+  username: string;
+  email: string;
+  apiKey: string;
+  balance: number;
+  role: Role;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  lastLoginAt: string;
+  payment: any[];
+  subscription: Subscription;
+  phone?: string; // Optional field for phone number
 };
 
 type AuthState = {
@@ -14,7 +37,7 @@ type AuthState = {
   error: string | null;
 };
 
-type AuthAction = 
+type AuthAction =
   | { type: "LOGIN_START" }
   | { type: "LOGIN_SUCCESS"; payload: User }
   | { type: "LOGIN_FAILURE"; payload: string }
@@ -67,7 +90,9 @@ const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
   }
 };
 
-export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
 
   useEffect(() => {
