@@ -16,6 +16,7 @@ export const registerAccount = async (
       username,
       refCode,
     });
+    toast.success(response?.data.message);
     return response;
   } catch (error) {
     console.error("Registration error:", error);
@@ -30,9 +31,36 @@ export const loginAccount = async (username: string, password: string) => {
       username,
       password,
     });
+    toast.success(response.data.message);
     return response;
   } catch (error) {
     console.error("Login error:", error);
+    toast.error(getErrorMessage(error));
+    return undefined;
+  }
+};
+
+export const logoutAccount = async () => {
+  try {
+    await axiosInstance.post("/auth/logout");
+    return true;
+  } catch (error) {
+    console.error("Logout error:", error);
+    toast.error(getErrorMessage(error));
+    return false;
+  }
+};
+
+export const refreshTokens = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const response = await axiosInstance.post("/auth/refresh-token", {
+      refreshToken,
+    });
+    localStorage.setItem("accessToken", response.data.accessToken);
+    return response;
+  } catch (error) {
+    console.error("Refresh token error:", error);
     toast.error(getErrorMessage(error));
     return undefined;
   }

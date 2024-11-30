@@ -1,13 +1,61 @@
 import { Copy, TrendingUp, Users } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { getReferralList } from "../../apis/referralsApis";
 import { ThemeContext } from "../../context/ThemeContext";
+
+interface Referral {
+  user: {
+    username: string;
+    email: string;
+  };
+  joinedAt: string;
+  earnings: {
+    total: string;
+    period: string;
+  };
+}
+
+interface ReferralResponse {
+  success: boolean;
+  referrals: Referral[];
+  stats: {
+    totalCount: number;
+    activeCount: number;
+    totalEarnings: string;
+    periodEarnings: string;
+  };
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}
 
 const Affiliates = () => {
   const { theme } = useContext(ThemeContext);
-  const referralLink = `${window.location.origin}/?ref=YOUR_REF_CODE`;
+  const [referralData, setReferralData] = useState<ReferralResponse | null>(
+    null
+  );
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const referralLink = `${window.location.origin}/register/?ref=${user.username}`;
+
+  useEffect(() => {
+    fetchReferrals();
+  }, []);
+
+  const fetchReferrals = async () => {
+    try {
+      const response = await getReferralList();
+      setReferralData(response?.data);
+    } catch (error) {
+      toast.error("Failed to fetch referral data");
+    }
+  };
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
+    toast.success("Referral link copied to clipboard");
   };
 
   return (
@@ -40,7 +88,23 @@ const Affiliates = () => {
             <h2 className="text-lg font-semibold">Total Referrals</h2>
             <Users className="h-5 w-5 text-blue-500" />
           </div>
-          <p className="text-3xl font-bold mt-2">0</p>
+          <p className="text-3xl font-bold mt-2">
+            {referralData?.stats.totalCount || 0}
+          </p>
+        </div>
+
+        <div
+          className={`${
+            theme === "dark" ? "bg-gray-800" : "bg-white"
+          } rounded-lg shadow-sm p-6`}
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Active Referrals</h2>
+            <Users className="h-5 w-5 text-green-500" />
+          </div>
+          <p className="text-3xl font-bold mt-2">
+            {referralData?.stats.activeCount || 0}
+          </p>
         </div>
 
         <div
@@ -52,7 +116,9 @@ const Affiliates = () => {
             <h2 className="text-lg font-semibold">Referral Earnings</h2>
             <TrendingUp className="h-5 w-5 text-green-500" />
           </div>
-          <p className="text-3xl font-bold mt-2">$0.00</p>
+          <p className="text-3xl font-bold mt-2">
+            ${referralData?.stats.totalEarnings || "0.00"}
+          </p>
         </div>
       </div>
 
@@ -106,11 +172,33 @@ const Affiliates = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm" colSpan={4}>
-                  No referrals yet
-                </td>
-              </tr>
+              {referralData && referralData.referrals.length > 0 ? (
+                referralData.referrals.map((referral, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {referral.user.username}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {new Date(referral.joinedAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      ${referral.earnings.total}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      ${referral.earnings.period}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-sm"
+                    colSpan={4}
+                  >
+                    No referrals yet
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

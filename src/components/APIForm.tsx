@@ -99,7 +99,7 @@ const CountryCodeDropdown = () => {
 export default function APIForm({ onSubmit }: APIFormProps) {
   const [formData, setFormData] = useState<Partial<ShortenerAPI>>({
     name: "",
-    url: "",
+    endpoint: "",
     maxViewsPerIP: 1,
     priority: 1,
     content: "",
@@ -108,8 +108,8 @@ export default function APIForm({ onSubmit }: APIFormProps) {
       startTime: "00:00",
       endTime: "23:59",
     },
-    countries: ["ALL"],
-    active: true,
+    applicableCountries: ["ALL"],
+    isActive: true,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -155,9 +155,9 @@ export default function APIForm({ onSubmit }: APIFormProps) {
               required
               placeholder="https://sitename.com/st?api=XXXXX&url="
               className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={formData.url}
+              value={formData.endpoint}
               onChange={(e) =>
-                setFormData({ ...formData, url: e.target.value })
+                setFormData({ ...formData, endpoint: e.target.value })
               }
             />
           </div>
@@ -210,11 +210,11 @@ export default function APIForm({ onSubmit }: APIFormProps) {
               type="text"
               placeholder="ALL or VN,US,GB,TH"
               className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={formData.countries?.join(",")}
+              value={formData.applicableCountries?.join(",")}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  countries: e.target.value.split(","),
+                  applicableCountries: e.target.value.split(","),
                 })
               }
             />

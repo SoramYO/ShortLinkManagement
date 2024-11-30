@@ -10,12 +10,13 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import type { ShortenerAPI, ShortenerAPIResponse } from "../types/api";
+import EditAPIForm from "./EditAPIForm";
 
 interface APIListProps {
   apis: ShortenerAPIResponse[];
   onDelete: (id: string) => void;
   onToggle: (id: string) => void;
-  onEdit: (api: ShortenerAPIResponse) => void;
+  onEdit: (id: string, updatedData: Partial<ShortenerAPIResponse>) => void;
 }
 
 export default function APIList({
@@ -30,6 +31,9 @@ export default function APIList({
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(
     null
   );
+  const [editingApi, setEditingApi] = useState<ShortenerAPIResponse | null>(
+    null
+  );
 
   const handleSort = (column: keyof ShortenerAPI) => {
     if (column === sortColumn) {
@@ -40,11 +44,27 @@ export default function APIList({
     }
   };
 
+  const handleEditClick = (api: ShortenerAPIResponse) => {
+    setEditingApi(api);
+  };
+
+  const handleEditClose = () => {
+    setEditingApi(null);
+  };
+
+  const handleEditSubmit = (
+    id: string,
+    updatedData: Partial<ShortenerAPIResponse>
+  ) => {
+    onEdit(id, updatedData);
+    setEditingApi(null);
+  };
+
   const filteredAndSortedApis = apis
     .filter(
       (api) =>
         api.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        api.url.toLowerCase().includes(searchTerm.toLowerCase())
+        api.endpoint.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
       if (a[sortColumn] < b[sortColumn])
@@ -109,12 +129,12 @@ export default function APIList({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredAndSortedApis.map((api) => (
-              <tr key={api.id}>
+              <tr key={api._id}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
                     {api.name}
                   </div>
-                  <div className="text-sm text-gray-500">{api.url}</div>
+                  <div className="text-sm text-gray-500">{api.endpoint}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {api.priority}
@@ -123,7 +143,7 @@ export default function APIList({
                   {api.maxViewsPerIP}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {api.countries?.join(", ")}
+                  {api.applicableCountries?.join(", ")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {api.schedule.enabled ? (
@@ -137,38 +157,38 @@ export default function APIList({
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      api.active
+                      api.isActive
                         ? "bg-green-100 text-green-800"
                         : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {api.active ? "Active" : "Inactive"}
+                    {api.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => onToggle(api.id)}
+                      onClick={() => onToggle(api._id)}
                       className={`p-1 rounded-full ${
-                        api.active
+                        api.isActive
                           ? "text-green-600 hover:text-green-900"
                           : "text-red-600 hover:text-red-900"
                       }`}
                       aria-label={
-                        api.active ? "Deactivate API" : "Activate API"
+                        api.isActive ? "Deactivate API" : "Activate API"
                       }
                     >
                       <Power className="w-5 h-5" />
                     </button>
                     <button
-                      onClick={() => onEdit(api)}
+                      onClick={() => handleEditClick(api)}
                       className="text-blue-600 hover:text-blue-900 p-1 rounded-full"
                       aria-label="Edit API"
                     >
                       <Edit className="w-5 h-5" />
                     </button>
                     <button
-                      onClick={() => setDeleteConfirmation(api.id)}
+                      onClick={() => setDeleteConfirmation(api._id)}
                       className="text-red-600 hover:text-red-900 p-1 rounded-full"
                       aria-label="Delete API"
                     >
@@ -257,6 +277,12 @@ export default function APIList({
           </div>
         </Dialog>
       </Transition>
+      <EditAPIForm
+        api={editingApi}
+        isOpen={!!editingApi}
+        onClose={handleEditClose}
+        onSubmit={handleEditSubmit}
+      />
     </div>
   );
 }

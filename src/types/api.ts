@@ -1,6 +1,6 @@
 export interface ShortenerAPI {
   name: string;
-  url: string;
+  endpoint: string;
   maxViewsPerIP: number;
   priority: number;
   content: string;
@@ -9,8 +9,8 @@ export interface ShortenerAPI {
     startTime: string;
     endTime: string;
   };
-  countries: string[];
-  active: boolean;
+  applicableCountries: string[];
+  isActive: boolean;
 }
 
 export interface ShortLinkResponse {
@@ -19,9 +19,9 @@ export interface ShortLinkResponse {
   error?: string;
 }
 export interface ShortenerAPIResponse {
-  id : string;
+  _id : string;
   name: string;
-  url: string;
+  endpoint: string;
   maxViewsPerIP: number;
   priority: number;
   content: string;
@@ -30,6 +30,6 @@ export interface ShortenerAPIResponse {
     startTime: string;
     endTime: string;
   };
-  countries: string[];
-  active: boolean;
+  applicableCountries: string[];
+  isActive: boolean;
 }

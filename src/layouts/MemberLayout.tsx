@@ -118,10 +118,9 @@ const MemberLayout = () => {
         >
           <div className="flex-1"></div>
           <div className="flex items-center space-x-4">
-            <div className="text-sm font-medium">
-              Balance: <span className="text-green-500">$0.00</span>
-            </div>
-            <div className="h-8 w-8 rounded-full bg-gray-200"></div>
+            <Link to="/member/profile">
+              <div className="h-8 w-8 rounded-full bg-gray-200"></div>
+            </Link>
             <button
               onClick={handleLogout}
               className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md"

@@ -14,7 +14,7 @@ const QuickLink = () => {
 
     try {
       const response = await quickLink(url);
-      if (response && response.data.errCode === 0) {
+      if (response && response.data.success === true) {
         toast.success("Shortened link created successfully");
         setShortCode(response.data.shortCode);
         setUrl("");

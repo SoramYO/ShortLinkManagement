@@ -2,8 +2,9 @@ import { AxiosError } from "axios";
 
 export const getErrorMessage = (error: unknown): string => {
   if (error instanceof AxiosError) {
-    if (error.response?.data?.message) {
-      return error.response.data.message;
+    console.error(error?.response?.data.error.message);
+    if (error?.response?.data.error.message) {
+      return error.response.data.error.message;
     }
     if (error.message === "Network Error") {
       return "Connection failed. Please check your internet connection.";

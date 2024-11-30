@@ -31,6 +31,7 @@
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.6",
     "react-tsparticles": "^2.12.2",
+    "recharts": "^2.13.3",
     "toastify": "^2.0.1",
     "tsparticles": "^3.6.0"
   },
