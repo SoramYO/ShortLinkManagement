@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getOriginalUrl } from "../../apis/shortLinkApis";
 
 const GetLinkPage = () => {
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
     // Start countdown
@@ -20,8 +20,9 @@ const GetLinkPage = () => {
 
     try {
       const response = await getOriginalUrl(shortCode);
+      console.log(response);
       if (response?.data?.originalUrl) {
-        window.location.href = response.data.originalUrl;
+        window.open(response.data.originalUrl, "_blank", "noopener,noreferrer");
       }
     } catch (error) {
       console.error("Error getting original URL:", error);
